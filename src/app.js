@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config');
 const meditationsRouter = require('./routes/meditations/meditationsRouter');
 const notesRouter = require('./routes/notes/notesRouter');
 const authRouter = require('./auth/authRouter');
-// const bcrypt = require('bcryptjs');
 const app = express();
 
 app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
@@ -15,11 +14,9 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
 }));
 app.use(cors());
 app.use(helmet());
-
-app.use('/api/meditations', meditationsRouter);
-// app.use('/api/notes', notesRouter);
 app.use('/api/auth', authRouter);
-
+app.use('/api/meditations', meditationsRouter);
+app.use('/api/notes', notesRouter);
 app.use(function errorHandler(error, req, res, next) {
   let response;
   if (NODE_ENV === 'production') {

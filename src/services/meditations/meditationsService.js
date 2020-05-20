@@ -10,18 +10,12 @@ const meditationsService = {
         'meditations.title',
         'meditations.content',
         'meditations.image'
-        // ...userFields,
-        // db.raw(
-        //   `count(DISTINCT rev) AS number_of_meditations`
-        // )
       )
-
-      .groupBy('meditations.id', 'meditations.id');
-
   },
 
   getById(db, id) {
     return meditationsService.getAllThings(db)
+      // .then(console.log(id))
       .where('meditations.id', id)
       .first();
   },
@@ -43,7 +37,7 @@ const meditationsService = {
       id: thingData.id,
       title: xss(thingData.title),
       content: xss(thingData.content),
-      image: thingData.image,
+      image: xss(thingData.image),
     };
   },
 
