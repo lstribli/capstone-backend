@@ -7,7 +7,7 @@ notesRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    notesService.getAllThings(req.app.get('db'))
+    notesService.getAllThings(req.app.get('db'), req.user.id)
       .then(things => {
         res.json(notesService.serializeThings(things))
       })
@@ -18,9 +18,6 @@ notesRouter
     const { content } = req.body;
     const { user_id } = req.body;
     const { mood_id } = req.body;
-
-    console.log('post: user_id', req.user);
-
     const newNote = {
       title,
       content,
@@ -28,9 +25,17 @@ notesRouter
       mood_id
     };
 
-    console.log(newNote);
     if (!title) {
-      return res.status(400).json({ error: 'note title is required' });
+      return res.status(400).json({ error: 'title is required' });
+    }
+    if (!content) {
+      return res.status(400).json({ error: 'content is required' });
+    }
+    if (!user_id) {
+      return res.status(400).json({ error: 'user_id is required' });
+    }
+    if (!mood_id) {
+      return res.status(400).json({ error: 'mood_id is required' });
     }
     notesService.addNote(req.app.get('db'), newNote)
       .then(note => res.status(201).json(note))
@@ -41,35 +46,41 @@ notesRouter
 notesRouter
   .route('/:notes_id')
   .all(requireAuth)
-  .all(checkThingExists)
-  .get((req, res) => {
-    res.json(notesService.serializeThing(res.thing))
+  // .all(checkThingExists)
+  .get((req, res, next) => {
+    notesService.getById(req.app.get('db'), req.params.notes_id, req.user.id)
+      .then(thing => {
+        res.json(thing);
+      })
+      .catch(next);
   })
   .delete((req, res, next) => {
-    notesService.deleteNote(req.app.get('db'), req.params.notes_id)
+    notesService.deleteNote(req.app.get('db'), req.params.notes_id, req.user.id)
       .then(thing => res.status(204).json((thing)).end())
       .catch(error => next(error));
-  })
+  });
 
 
-async function checkThingExists(req, res, next) {
-  try {
-    const thing = await notesService.getById(
-      req.app.get('db'),
-      req.params.notes_id
-    )
+// async function checkThingExists(req, res, next) {
+//   // return next()
+//   try {
+//     const thing = await notesService.getById(
+//       req.app.get('db'),
+//       // req.user_id,
+//       req.params.notes_id
+//     )
 
-    if (!thing)
-      return res.status(404).json({
-        error: `Thing doesn't exist`
-      })
+//     if (!thing)
+//       return res.status(404).json({
+//         error: `Thing doesn't exist`
+//       })
 
-    res.thing = thing
-    next()
-  } catch (error) {
-    next(error)
-  }
-}
+//     res.thing = thing
+//     next()
+//   } catch (error) {
+//     next(error)
+//   }
+// }
 
 
 module.exports = notesRouter;

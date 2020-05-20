@@ -21,7 +21,7 @@ const meditationsService = {
   },
 
   serializeThings(things) {
-    console.log(things);
+    // console.log(things);
     return things.map(this.serializeThing);
   },
 

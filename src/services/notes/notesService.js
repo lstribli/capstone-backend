@@ -1,8 +1,7 @@
 const xss = require('xss');
 const Treeize = require('treeize');
-
 const notesService = {
-  getAllThings(db) {
+  getAllThings(db, user_id) {
     return db
       .from('notes')
       .select(
@@ -13,22 +12,13 @@ const notesService = {
         'notes.mood_id',
         'notes.user_id'
       )
-    // .groupBy('notes.id', 'notes.id');
-  },
-
-  getById(db, id) {
-    // console.log(id);
-    return notesService.getAllThings(db)
-      .where('notes.id', id)
-      // .then(console.log('notesService: notes.id:', id))
-      .first();
-  },
-  deleteNote(db, id) {
-    return notesService.getAllThings(db)
-      .where('notes.id', id)
-      // .then(console.log('notesService: notes.id:', id))
-      .first()
-      .delete();
+      .join(
+        'users',
+        'notes.user_id',
+        'users.id'
+      )
+      .groupBy('users.id', 'notes.id')
+      .where('users.id', user_id);
   },
   addNote(db, newNote) {
     return db('notes')
@@ -36,17 +26,32 @@ const notesService = {
       .returning('*')
       .then(rows => rows[0]);
   },
+  getById(db, id, user_id) {
+    return notesService.getAllThings(db, user_id)
+      .where('notes.id', id)
+      .first();
+  },
+  deleteNote(db, id, user_id) {
+    return notesService.getAllThings(db, id, user_id)
+      .where('notes.id', id)
+      .first()
+      .delete();
+  },
+  // updateNote(db,id,user_id) {
+
+
+  //   return notesService.getAllThings(db,id,user_id,noteToUpdate)
+  //   .where('notes.id', id)
+  //   .first()
+  //   .update();
+  // }
+
+
   serializeThings(things) {
-    // console.log(things);
     return things.map(this.serializeThing);
   },
-
   serializeThing(thing) {
     const thingTree = new Treeize();
-
-    // Some light hackiness to allow for the fact that `treeize`
-    // only accepts arrays of objects, and we want to use a single
-    // object.
     const thingData = thingTree.grow([thing]).getData()[0];
     return {
       id: thingData.id,

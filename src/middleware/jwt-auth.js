@@ -9,31 +9,24 @@ function requireAuth(req, res, next) {
   } else {
     bearerToken = authToken.slice(7, authToken.length);
   }
-  // console.log(bearerToken);
-
   try {
     const payload = AuthService.verifyJwt(bearerToken);
-    // console.log(payload);
-
-
     AuthService.getUserWithUserName(
       req.app.get('db'),
       payload.sub
     )
       .then(user => {
-        // console.log(user);
         if (!user)
           return res.status(401).json({ error: 'Unauthorized request' });
         //MOST important thing -- req.user = user goes into the database and retrieves ALL the user info so you could do user.password
         req.user = user;
+        // console.log(user);
         next();
       })
       .catch(err => {
-        // console.error(err);
         next(err);
       });
   } catch (error) {
-    // console.log(error);
     res.status(401).json({ error: 'Unauthorized request' });
   }
 }
