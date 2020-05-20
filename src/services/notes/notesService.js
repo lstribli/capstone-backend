@@ -2,23 +2,16 @@ const xss = require('xss');
 const Treeize = require('treeize');
 const notesService = {
   getAllThings(db, user_id) {
-    return db
-      .from('notes')
+    return db('notes')
       .select(
-        'notes.id',
-        'notes.title',
-        'notes.content',
-        'notes.date_created',
-        'notes.mood_id',
-        'notes.user_id'
+        'id',
+        'title',
+        'content',
+        'date_created',
+        'mood_id',
+        'user_id'
       )
-      .join(
-        'users',
-        'notes.user_id',
-        'users.id'
-      )
-      .groupBy('users.id', 'notes.id')
-      .where('users.id', user_id);
+      .where({ 'user_id': user_id });
   },
   addNote(db, newNote) {
     return db('notes')
@@ -27,26 +20,20 @@ const notesService = {
       .then(rows => rows[0]);
   },
   getById(db, id, user_id) {
-    return notesService.getAllThings(db, user_id)
-      .where('notes.id', id)
+    return db('notes')
+      .where({ 'notes.id': id, 'user_id': user_id })
       .first();
   },
   deleteNote(db, id, user_id) {
-    return notesService.getAllThings(db, id, user_id)
-      .where('notes.id', id)
-      .first()
+    return db('notes')
+      .where({ 'notes.id': id, 'user_id': user_id })
       .delete();
   },
-  // updateNote(db,id,user_id) {
-
-
-  //   return notesService.getAllThings(db,id,user_id,noteToUpdate)
-  //   .where('notes.id', id)
-  //   .first()
-  //   .update();
-  // }
-
-
+  updateNote(db, id, user_id, noteToUpdate) {
+    return db('notes')
+      .where({ 'notes.id': id, 'user_id': user_id })
+      .update(noteToUpdate);
+  },
   serializeThings(things) {
     return things.map(this.serializeThing);
   },
