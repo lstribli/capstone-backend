@@ -41,12 +41,12 @@ authRouter
             const sub = dbUser.user_name;
             const payload = { id: dbUser.id };
             // console.log(sub, payload);
-            res.send({
+            res.json({
               authToken: AuthService.createJwt(sub, payload),
             });
           });
       })
-      .catch(next);
+      .catch(e => console.log(e));
   });
 
 module.exports = authRouter;
