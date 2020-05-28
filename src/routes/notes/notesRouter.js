@@ -8,7 +8,7 @@ notesRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    notesService.getAllThings(req.app.get('db'), req.user.id, req.meditations.id)
+    notesService.getAllThings(req.app.get('db'), req.user.id)
       .then(things => {
         res.json(notesService.serializeThings(things));
       })

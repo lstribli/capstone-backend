@@ -13,31 +13,25 @@ authRouter
         return res.status(400).json({
           error: `Missing '${key}' in request body`
         });
-
     AuthService.getUserWithUserName(
       req.app.get('db'),
       loginUser.user_name
     )
       .then(dbUser => {
-        console.log('DB USER:', dbUser);
+        // console.log('DB USER:', dbUser);
         if (!dbUser)
           return res.status(400).json({
             error: 'Incorrect user_name or password',
           });
-        console.log('DBUSER:', dbUser, loginUser);
+        // console.log('DBUSER:', dbUser, loginUser);
         return AuthService.comparePasswords(loginUser.password, dbUser.password)
           .then(compareMatch => {
-            console.log(compareMatch);
-
+            // console.log(compareMatch);
             if (!compareMatch) {
               return res.status(401).json({
-
                 error: 'Incorrect user_name or password',
               });
-
             }
-
-
             const sub = dbUser.user_name;
             const payload = { id: dbUser.id };
             // console.log(sub, payload);
