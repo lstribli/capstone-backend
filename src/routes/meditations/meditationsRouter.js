@@ -22,21 +22,7 @@ meditationsRouter
   .get((req, res) => {
     res.json(meditationsService.serializeThing(res.thing))
   })
-//get review for thing by id
-// thingsRouter.route('/:thing_id/meditation/')
-//   //.all deals with middleware which MUST be a function
-//   .all(requireAuth)
-//   .all(checkThingExists)
-//   .get((req, res, next) => {
-//     ThingsService.getReviewsForThing(
-//       req.app.get('db'),
-//       req.params.thing_id
-//     )
-//       .then(reviews => {
-//         res.json(ThingsService.serializeThingReviews(reviews))
-//       })
-//       .catch(next)
-//   })
+
 
 /* async/await syntax for promises */
 async function checkThingExists(req, res, next) {

@@ -29,9 +29,9 @@ notesRouter
     if (!title) {
       return res.status(400).json({ error: 'title is required' });
     }
-    if (!content) {
-      return res.status(400).json({ error: 'content is required' });
-    }
+    // if (!content) {
+    //   return res.status(400).json({ error: 'content is required' });
+    // }
     if (!user_id) {
       return res.status(400).json({ error: 'user_id is required' });
     }
