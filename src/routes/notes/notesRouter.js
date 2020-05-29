@@ -29,15 +29,15 @@ notesRouter
     if (!title) {
       return res.status(400).json({ error: 'title is required' });
     }
-    // if (!content) {
-    //   return res.status(400).json({ error: 'content is required' });
-    // }
-    // if (!user_id) {
-    //   return res.status(400).json({ error: 'user_id is required' });
-    // }
-    // if (!mood_id) {
-    //   return res.status(400).json({ error: 'mood_id is required' });
-    // }
+    if (!content) {
+      return res.status(400).json({ error: 'content is required' });
+    }
+    if (!user_id) {
+      return res.status(400).json({ error: 'user_id is required' });
+    }
+    if (!mood_id) {
+      return res.status(400).json({ error: 'mood_id is required' });
+    }
     notesService.addNote(req.app.get('db'), newNote)
       .then(note => res.status(201).json(note))
       .catch(error => next(error));
