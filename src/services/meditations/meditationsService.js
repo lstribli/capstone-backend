@@ -10,7 +10,7 @@ const meditationsService = {
         'meditations.title',
         'meditations.content',
         'meditations.image'
-      )
+      );
   },
 
   getById(db, id) {
