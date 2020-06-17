@@ -24,12 +24,12 @@ notesRouter
       return res.status(400).json({ error: 'title is required' });
     }
 
-    if (!user_id) {
-      return res.status(400).json({ error: 'user_id is required' });
-    }
-    if (!mood_id) {
-      return res.status(400).json({ error: 'mood_id is required' });
-    }
+    // if (!user_id) {
+    //   return res.status(400).json({ error: 'user_id is required' });
+    // }
+    // if (!mood_id) {
+    //   return res.status(400).json({ error: 'mood_id is required' });
+    // }
     // const newNote = {
     //   title,
     //   content,
