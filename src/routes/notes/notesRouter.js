@@ -15,17 +15,11 @@ notesRouter
       .catch(next);
   })
   .post(dataParser, (req, res, next) => {
-    const { title } = req.body;
-    const { content } = req.body;
-    const { user_id } = req.body;
-    const { mood_id } = req.body;
-    const newNote = {
+    const {
       title,
       content,
       user_id,
-      mood_id
-    };
-
+      mood_id, } = req.body;
     if (!title) {
       return res.status(400).json({ error: 'title is required' });
     }
@@ -38,9 +32,17 @@ notesRouter
     if (!mood_id) {
       return res.status(400).json({ error: 'mood_id is required' });
     }
-    notesService.addNote(req.app.get('db'), newNote)
+    // const newNote = {
+    //   title,
+    //   content,
+    //   user_id,
+    //   mood_id
+    // };
+
+
+    notesService.addNote(req.app.get('db'), req.body)
       .then(note => res.status(201).json(note))
-      .catch(error => next(error));
+      .catch(error => next(console.log(error)));
   });
 
 
@@ -66,7 +68,7 @@ notesRouter
       .catch(error => next(error));
   })
   .patch(dataParser, (req, res, next) => {
-    const {
+    let {
       title,
       content,
       user_id,

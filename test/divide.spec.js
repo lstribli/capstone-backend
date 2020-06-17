@@ -145,13 +145,14 @@ describe('Notes Endpoints', () => {
   afterEach('cleanup', () => helpers.cleanTables(db));
 
 
-  describe('GET /api/notes', () => {
-    context('Get notes', () => {
-      beforeEach('insert notes', () =>
-        helpers.seedNotesTable(db, testNotes)
-      );
+  describe('POST /api/notes', () => {
+    context('Post note', () => {
+
       beforeEach('insert meditations', () =>
         helpers.seedMeditationsTable(db, testMeds)
+      );
+      beforeEach('insert notes', () =>
+        helpers.seedNotesTable(db, testNotes)
       );
       beforeEach('insert users', () =>
         helpers.seedUsersTable(db, testUsers)
@@ -159,12 +160,20 @@ describe('Notes Endpoints', () => {
       context('Happy path', () => {
         it(`Responds 200, serialized notes`, () => {
 
+          let testNote = {
+            title: "newtestnote",
+            content: "testingthethingsonpostman",
+            user_id: 1,
+            mood_id: 1
+          };
+
           return supertest(app)
-            .get('/api/notes')
+            .post('/api/notes')
             .set('Authorization', helpers.makeAuthHeader(testUser))
-            .expect(200)
+            .send(testNote)
+            .expect(201)
             .expect(res => {
-              expect(res.body.title);
+              expect(res);
               expect(res.body.content);
               expect(res.body.date_created);
               expect(res.body.mood_id);
@@ -181,8 +190,19 @@ describe('Notes Endpoints', () => {
               expect(res);
             });
         });
+        it(`Responds 201, Content Created`, () => {
+          return supertest(app)
+            .post('/api/notes')
+            .set('Authorization', helpers.makeAuthHeader(testUser))
+            .expect(res => {
+              expect(res.body.id);
+              expect(res.body.title);
+              expect(res.body.content);
+              expect(res.body.mood_id);
+              expect(res.body.user_id);
+            });
+        });
       });
-
     });
   });
 });

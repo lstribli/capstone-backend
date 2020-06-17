@@ -45,7 +45,7 @@ function makeMeditationsArray() {
 function makeNotesArray() {
   return [
     {
-      id: 1,
+      id: 944,
       title: "Title 1",
       content: "tests1",
 
@@ -53,7 +53,7 @@ function makeNotesArray() {
       user_id: 1
     },
     {
-      id: 2,
+      id: 955,
       title: "Title 2",
       content: "tests2",
 
@@ -61,7 +61,7 @@ function makeNotesArray() {
       user_id: 1
     },
     {
-      id: 3,
+      id: 966,
       title: "Title 3",
       content: "tests3",
 
