@@ -20,22 +20,11 @@ notesRouter
       content,
       user_id,
       mood_id, } = req.body;
-    if (!title) {
-      return res.status(400).json({ error: 'title is required' });
+    if (!title || !content || !user_id || !mood_id) {
+      return res.status(400).json({ error: 'all fields are required' });
     }
 
-    // if (!user_id) {
-    //   return res.status(400).json({ error: 'user_id is required' });
-    // }
-    // if (!mood_id) {
-    //   return res.status(400).json({ error: 'mood_id is required' });
-    // }
-    // const newNote = {
-    //   title,
-    //   content,
-    //   user_id,
-    //   mood_id
-    // };
+
 
 
     notesService.addNote(req.app.get('db'), req.body)
