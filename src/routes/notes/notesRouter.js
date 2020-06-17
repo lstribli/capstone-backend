@@ -23,11 +23,7 @@ notesRouter
     if (!title || !content || !user_id || !mood_id) {
       return res.status(400).json({ error: 'all fields are required' });
     }
-
-
-
-
-    notesService.addNote(req.app.get('db'), req.body)
+    return notesService.addNote(req.app.get('db'), req.body)
       .then(note => res.status(201).json(note))
       .catch(error => next(console.log(error)));
   });
